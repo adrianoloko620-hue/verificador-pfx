@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificador de validade de certificados digitais (.pfx)</title>
+<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAEAIABoBAAANgAAACAgAAABACAAKBEAAJ4EAAAwMAAAAQAgAGgmAADGFQAAKAAAABAAAAAgAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOTDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/z6cX/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNd/+TDXP/kw1z/7NeT//Ljtf/ny3L/9e3Q//Hisv/t2pz/5cdo/+TDXP/kw1z/5MNc/+TDXP/kw1z/7NeU//38+P/489//58x2//Tnwf/lx2j/9evJ//Xszf/kxGD/8OGv/+rShv/kw1z/5MNc/+TDXP/kw1z/5MNc//bszv///////////+7cof/x4K//48Nb//Xry//17dD/5MVk//Hhr//q0of/5MNc/+TDXP/kw1z/5MNc/+TDXP/27M///v7+//7+/v/s15b/69OJ/+TDXP/t2Jj/7dqb//Hgrv/u26D/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5sls/+fLcv/ny3L/9erJ//r26P/37tP/5cdo/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc//fu0////////////+7am//kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/37tP///////379v/ozHb/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5shq/+bJbv/lxWP/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAACAAAABAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOTDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+PDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/w4K3/9e3R/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc//Hkt//489//5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TFYv/ozXj/5cZn/+TDXP/kw1z/8eS3//jz3//kxWP/5813/+XGaP/kw1z/5MNd/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MRg/+TDXP/kw1z/5MNc/+TDXP/s2Jj//Pv1//79+//9/fv/8eKz/+TDXP/x5Lf//Pv1//z79P/+/fr//f37//Disv/n0IX/5MVk/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/6tOL//n15v/+/v7/+vfq/+vXlf/kw1z/5slv//79+//v3qj/48Ne/+rTi//+/v3/69WN//Hkt//69+j/5chr/+PDXv/r1pP//f78/+zXlf/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bJcP/9/fn//////////////////v79/+jOff/s1pL//v79/+TFZP/kw1z/5MNc//n15f/x47T/8eS3//jz3//kw1z/5MNc/+TDXP/27tL/9evK/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/7dmb////////////////////////////8OCs/+zXlP/+/v3/5MNh/+TDXP/jw1v/+fPh//Hjtf/x5Lf/+PPf/+TDXP/kw1z/5MNc//bt0v/168v/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/u2qD//v7////////////////////////x4bL/7NeU//7+/f/kw2H/5MNc/+PDW//58+H/8eO1//Hkt//8+/P/5816/+PDXf/r1ZH//v78/+zYmf/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+7aoP/+/v7///////////////////////Hhsv/s15T//v79/+TEYf/kw1z/5MNb//jz4P/x47X/8eS3//r47v/69uj//fz4//7+/f/y5br/5MNd/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/7tug//7+/v/+/v7//v7+//7+/v/+/v7/8eGy/+TEYP/lx2n/5MNc/+TDXP/kw1z/5cZn/+XFY//kxWP/5cZm/+TDX//ozXn/5chs/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/mym//6tOJ/+rTif/q04n/6tOJ/+rTif/v36v/9u3R//bt0f/27dH/9OnG/+rTif/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+/eqP///////////////////////v79/+rUjv/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/796o////////////////////////////9+/U/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/v3qj////////////////////////////59OH/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+/eqP////////////////////////////Lluv/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/796o///////////////////////38dv/5cdo/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/myW7/6dCB/+nQgf/p0IH/6M14/+TDXf/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAADAAAABgAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOTDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TCXP/kw1z/48Jc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+jQgf/48+D/8eS3/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+nSif/+//3/9OvL/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+nSif/+//3/9OvL/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MRg/+XGZf/lxmT/5MNe/+TDXP/kw1z/5MNc/+nSif/+//3/9OvL/+TDXf/lxWP/5cZl/+XFYv/kw13/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TEX//p0YX/8eO0//Xryf/06cb/8OCt/+jOfP/kw13/5MNc/+nSif/+//3/9u/V/+7cof/z6MH/9evK//Pmvf/s15X/5MVj/+XIbP/my3T/5MNe/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/jw1//5MVk/+PCXf/kw1z/5MNc/+TDXP/kw1z/5MNc/+vWlP/8+e///v79//39+f/9/fr//v79//r25v/q04r/5MNc/+nSif/+//7//v36//79+f/9/fj//fz3//7+/v/9/Pb/8ua+/+TLdf/nz3//5MRe/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kxF7/5816//Tqxv/8+/T//v79//r36v/u36r/5shr/+TDXP/kw1z/5cht//z79P/9+/b/7d2j/+PEYv/lx2v/8ubA/////v/279P/5sdp/+nSif/+//3/+fXk/+jPgP/kxGL/48Ng/+vWlf/69+r//v7+/+3cpP/kw13/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXf/q0on/+vfq//7//////////////////v/+/vz/9OzN/+XGaP/kw1z/7t2k///+/v/06cf/5cZl/+TDXP/kw1z/5MVk//r26f/9/Pf/5816/+nSif/+//3/9OvL/+TDXP/kw1z/5MNc/+TEXv/t26H//fz4//n04v/lx2n/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+XHZv/16sr////+/////////////////////////////v/9/+/eqP/kwlz/8uW5/////v/x4rL/5MNe/+TDXP/kw1z/48Nc//Xt0P/+/v7/6dGG/+nSif/+//3/9OvL/+TDXP/kw1z/5MNc/+TDXP/ozXv/+/js//z57//oz33/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bJcP/69+n///////////////////////////////////////jx2//jwl3/8uW7/////v/w4bD/5MNe/+TDXP/kw1z/48Nb//Xszf/+/v3/6NKG/+nSif/+//3/9OvL/+TDXP/kw1z/5MNc/+TDXP/ozXr/+/jt//z57v/pzn7/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+fKc//7+fH///////////////////////////////////////r04//jw2H/8uW7/////v/w4bD/5MNe/+TDXP/kw1z/48Nb//Xszf/+/v3/6NKG/+nSif/+//3/9u7S/+TDXP/kw1z/5MNc/+TEXv/t25///fz4//n14//lx2r/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+fKc//7+fL///////////////////////////////////////r05P/jw2H/8uW7/////v/w4bD/5MNe/+TDXP/kw1z/48Nb//Xszf/+/v3/6NKG/+nSif/+//7//f34/+3do//kxWX/4sNf/+vVkP/69+r//v/+/+/fqv/kw13/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+fKc//7+fH///////////////////////////////////////r05P/jxGH/8uW7//7//v/x4bH/5MNe/+TDXP/kw1z/48Nb//Xszf/+/v3/6NKG/+nSif/+//3/+/rz//v68//9/ff//fz1//7//v/9/Pj/9OrI/+TDX//kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+fKc//7+fH///////////////////////////////////////r05P/kxGH/7NeT//Lluf/r1I3/5MNd/+TDXP/kw1z/5MNc/+3anv/y5bn/58x1/+fMdv/y5bn/7Nqd/+vUjf/y5bz/9evM//Pow//t2p7/5cZm/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+fKc//7+fH//v7+//7+/v/+/v7//v7+//7+/v/+/v7//v7+//r04//kxGL/48Rf/+TEYP/jxF7/5MNc/+TDXP/kw1z/5MNc/+TEX//kxWD/5MNd/+TDXf/kxWD/5MRf/+TDXP/lxGH/5cZn/+XGZP/kw13/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+XGZ//u3KH/796n/+/eqP/v3qj/796o/+/eqP/v3qj/796o/+/eqv/x4bP/8eGz//Hhs//x4bP/8eGz/+/fqv/p0oX/5cZm/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDW//kw1v/5MNb/+TDW//kw1v/5MNb/+fLdv/9/Pn///////////////////////7+/v/9/Pj/9OrI/+bJcP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn//////////////////////////////////v/9//Tqyf/kxF//5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn///////////////////////////////////////z57v/oz33/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn///////////////////////////////////////379f/r1pD/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn///////////////////////////////////////379P/r1Y7/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn///////////////////////////////////////r36f/nzHb/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn//////////////////////////////////v/9/+/grv/kw17/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+bLdv/9/Pn////////////////////////////8+/X/79+q/+TFY//kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+XGZv/s2Zn/7Nmb/+zZm//s2Zv/7dmb/+zWkv/myW//5MNd/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNb/+TDW//kw1v/5MNb/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/+TDXP/kw1z/5MNc/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/forge/1.3.1/forge.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f5f4;
+    --card: #ffffff;
+    --border: #e2e0da;
+    --text: #2c2c2a;
+    --muted: #5f5e5a;
+    --accent: #185fa5;
+    --accent-soft: #f0f6fc;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #97c459;
+    --amber-bg: #faeeda; --amber-text: #633806; --amber-border: #ef9f27;
+    --red-bg: #fcebeb; --red-text: #501313; --red-border: #e24b4a;
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1b19;
+    --card: #252523;
+    --border: #3a3a36;
+    --text: #ece9e2;
+    --muted: #a19e94;
+    --accent: #5b9fe0;
+    --accent-soft: rgba(91,159,224,0.12);
+    --green-bg: rgba(151,196,89,0.15); --green-text: #b3e07a; --green-border: #6d9440;
+    --amber-bg: rgba(239,159,39,0.15); --amber-text: #f3c46f; --amber-border: #b57a1f;
+    --red-bg: rgba(226,75,74,0.15); --red-text: #f29a99; --red-border: #a83a39;
+  }
+  body { transition: background 0.15s, color 0.15s; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem 1rem;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  p.sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .drop {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .drop:hover, .drop.dragover { border-color: var(--accent); background: var(--accent-soft); }
+  .drop p { margin: 0.3rem 0; color: var(--muted); font-size: 14px; }
+  .drop strong { color: var(--text); }
+  input[type=file] { display: none; }
+  .pwrow {
+    display: flex; align-items: center; gap: 10px; margin-top: 1rem; flex-wrap: wrap;
+  }
+  .pwrow label { font-size: 13px; color: var(--muted); }
+  .pwrow input[type=password], .pwrow input[type=text] {
+    flex: 1; min-width: 180px; padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 14px;
+  }
+  .pwrow small { color: var(--muted); font-size: 12px; width: 100%; }
+  .pwfield { position: relative; flex: 1; min-width: 180px; display: flex; }
+  .pwfield input { flex: 1; padding-right: 34px; }
+  .pwtoggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 4px; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pwtoggle:hover { color: var(--text); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    border: 1px solid;
+  }
+  .badge.ok { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
+  .badge.warn { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
+  .badge.err { background: var(--red-bg); color: var(--red-text); border-color: var(--red-border); }
+  .badge.info { background: #eef2f6; color: var(--muted); border-color: var(--border); }
+  .filename { font-weight: 500; }
+  .errtext { color: var(--red-text); font-size: 12px; }
+  .retry { display: flex; gap: 6px; margin-top: 4px; }
+  .retry input { flex: 1; padding: 5px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; }
+  .retry button { padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  .actions { display: flex; gap: 10px; margin-top: 1rem; }
+  .form-link-btn {
+    padding: 9px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .form-link-btn:hover { opacity: 0.9; }
+  .sheet-link-btn { background: #1f7a3f; border-color: #1f7a3f; }
+  button.main {
+    padding: 9px 18px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent);
+    color: #fff; font-size: 14px; cursor: pointer;
+  }
+  button.main:disabled { opacity: 0.5; cursor: default; }
+  button.secondary {
+    padding: 9px 18px; border-radius: 6px; border: 1px solid var(--border); background: var(--card);
+    color: var(--text); font-size: 14px; cursor: pointer;
+  }
+  .note {
+    font-size: 12.5px; color: var(--muted); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+  .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 1rem; }
+  .perfile-title { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .perfile-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .perfile-row .perfile-name { flex: 0 0 auto; max-width: 40%; font-size: 13px; word-break: break-all; }
+  .rename-cell { display: flex; gap: 6px; align-items: center; }
+  .rename-cell input { width: 140px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; }
+  .rename-cell button { padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap; }
+  .rename-cell button:hover { border-color: var(--accent); color: var(--accent); }
+  .rename-cell .ext { font-size: 12px; color: var(--muted); }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+  .theme-btn { white-space: nowrap; flex-shrink: 0; }
+  .copyable { cursor: pointer; border-bottom: 1px dotted transparent; }
+  .copyable:hover { border-bottom-color: var(--muted); }
+  .copyable.copied { color: var(--accent); border-bottom-color: transparent; }
+  .doc-cell { font-variant-numeric: tabular-nums; }
+  .pw-cell { display: flex; align-items: center; gap: 6px; }
+  .pwMask { font-family: monospace; font-size: 13px; letter-spacing: 1px; }
+  .table-scroll { overflow-x: auto; }
+  table { table-layout: auto; }
+  td.clampable {
+    word-break: break-word;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header-row">
+    <div>
+      <h1>Verificador de validade de certificados digitais</h1>
+      <p class="sub">Envie arquivos .pfx / .p12 e veja a data de validade de cada certificado. Todo o processamento acontece aqui no navegador — nenhum arquivo é enviado a servidor algum.</p>
+    </div>
+    <button type="button" class="secondary theme-btn" id="themeToggle">🌙 Modo escuro</button>
+  </div>
+
+  <div class="card">
+    <div class="drop" id="drop">
+      <p><strong>Clique para selecionar</strong> ou arraste os arquivos .pfx aqui</p>
+      <p>Você pode selecionar vários arquivos de uma vez</p>
+    </div>
+    <input type="file" id="fileInput" multiple accept=".pfx,.p12">
+
+    <div class="pwrow">
+      <label for="globalPw">Senha (aplicada a todos os arquivos):</label>
+      <div class="pwfield">
+        <input type="password" id="globalPw" placeholder="Senha do certificado">
+        <button type="button" class="pwtoggle" data-target="globalPw" aria-label="Mostrar senha">&#128065;</button>
+      </div>
+      <small>Se algum arquivo tiver senha diferente, você poderá informá-la individualmente depois.</small>
+    </div>
+
+    <div id="perFilePasswords" style="display:none; margin-top: 1rem;"></div>
+
+    <div class="actions">
+      <button class="main" id="processBtn" disabled>Verificar validade</button>
+      <button class="secondary" id="clearBtn">Limpar</button>
+      <a class="form-link-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=KDU_6t7YTEOAZiusVjJy621B2cJsUd9JuQpMmyg9gQ9UMzdWNFBBSFg1WU9YVkVFUjNRNFFaNU5RVC4u" target="_blank" rel="noopener noreferrer">📋 Informe de Certificados Digitais</a>
+      <a class="form-link-btn sheet-link-btn" href="https://upholdassessoria.sharepoint.com/:x:/r/sites/Upnet/_layouts/15/Doc.aspx?sourcedoc=%7BC5487056-624D-4B5F-BDA5-2D100D0EE52B%7D&file=CERTIFICADOS_DIGITAIS.xlsx&action=default&mobileredirect=true" target="_blank" rel="noopener noreferrer">📊 Planilha de Certificados Digitais</a>
+    </div>
+  </div>
+
+  <div class="card" id="resultsCard" style="display:none;">
+    <div class="table-scroll">
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Arquivo</th>
+          <th>Titular</th>
+          <th>CPF/CNPJ</th>
+          <th>Emissor</th>
+          <th>Validade</th>
+          <th>Status</th>
+          <th>Senha</th>
+          <th>Renomear e baixar</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <p class="note">Ferramenta local: os arquivos .pfx e as senhas digitadas não saem do seu computador — tudo é lido e processado diretamente no navegador via JavaScript. Basta abrir este arquivo .html (funciona offline, sem instalar nada). Dica: clique em qualquer informação da tabela (arquivo, titular, CPF/CNPJ, emissor ou validade) para copiá-la.</p>
+</div>
+
+<script>
+const dropEl = document.getElementById('drop');
+const fileInput = document.getElementById('fileInput');
+const processBtn = document.getElementById('processBtn');
+const clearBtn = document.getElementById('clearBtn');
+const resultsCard = document.getElementById('resultsCard');
+const resultsBody = document.getElementById('resultsBody');
+const globalPw = document.getElementById('globalPw');
+const pwrow = document.querySelector('.pwrow');
+const perFilePasswords = document.getElementById('perFilePasswords');
+const themeToggle = document.getElementById('themeToggle');
+
+let queuedFiles = [];
+let lastResults = [];
+let perFilePwMap = new Map();
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  themeToggle.textContent = theme === 'dark' ? '☀️ Modo claro' : '🌙 Modo escuro';
+  try { localStorage.setItem('pfxCheckerTheme', theme); } catch (e) {}
+}
+(function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem('pfxCheckerTheme'); } catch (e) {}
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+})();
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+function copyToClipboard(text, el) {
+  if (!text) return;
+  const done = () => {
+    if (!el) return;
+    const original = el.textContent;
+    el.classList.add('copied');
+    el.textContent = 'Copiado!';
+    setTimeout(() => { el.textContent = original; el.classList.remove('copied'); }, 900);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(done);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    done();
+  }
+}
+resultsBody.addEventListener('click', e => {
+  const el = e.target.closest('.copyable');
+  if (!el) return;
+  copyToClipboard(el.dataset.copy || el.textContent, el);
+});
+
+function togglePwVisibility(input, btn) {
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerHTML = '&#128584;';
+    btn.setAttribute('aria-label', 'Esconder senha');
+  } else {
+    input.type = 'password';
+    btn.innerHTML = '&#128065;';
+    btn.setAttribute('aria-label', 'Mostrar senha');
+  }
+}
+
+document.querySelector('.pwtoggle[data-target="globalPw"]').addEventListener('click', () => {
+  const input = document.getElementById('globalPw');
+  togglePwVisibility(input, document.querySelector('.pwtoggle[data-target="globalPw"]'));
+});
+
+resultsBody.addEventListener('click', e => {
+  const btn = e.target.closest('.retryToggle');
+  if (!btn) return;
+  const input = btn.parentElement.querySelector('.retryPw');
+  togglePwVisibility(input, btn);
+});
+
+dropEl.addEventListener('click', () => fileInput.click());
+dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('dragover'); });
+dropEl.addEventListener('dragleave', () => dropEl.classList.remove('dragover'));
+dropEl.addEventListener('drop', e => {
+  e.preventDefault();
+  dropEl.classList.remove('dragover');
+  addFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e => addFiles(e.target.files));
+
+function addFiles(fileList) {
+  const valid = Array.from(fileList).filter(f => /\.(pfx|p12)$/i.test(f.name));
+  queuedFiles = queuedFiles.concat(valid);
+  dropEl.querySelector('p strong').textContent = queuedFiles.length + ' arquivo(s) selecionado(s)';
+  processBtn.disabled = queuedFiles.length === 0;
+  renderPerFilePasswords();
+}
+
+function renderPerFilePasswords() {
+  if (queuedFiles.length > 1) {
+    pwrow.style.display = 'none';
+    perFilePasswords.style.display = 'block';
+    perFilePasswords.innerHTML = '<div class="perfile-title">Informe a senha de cada arquivo:</div>';
+    queuedFiles.forEach((file, idx) => {
+      const id = 'pf_pw_' + idx;
+      if (!perFilePwMap.has(file)) perFilePwMap.set(file, '');
+      const row = document.createElement('div');
+      row.className = 'perfile-row';
+      row.innerHTML =
+        '<span class="perfile-name">' + escapeHtml(file.name) + '</span>' +
+        '<div class="pwfield">' +
+          '<input type="password" id="' + id + '" placeholder="Senha do certificado">' +
+          '<button type="button" class="pwtoggle" aria-label="Mostrar senha">&#128065;</button>' +
+        '</div>';
+      const input = row.querySelector('input');
+      input.addEventListener('input', () => perFilePwMap.set(file, input.value));
+      row.querySelector('.pwtoggle').addEventListener('click', e => togglePwVisibility(input, e.currentTarget));
+      perFilePasswords.appendChild(row);
+    });
+  } else {
+    pwrow.style.display = 'flex';
+    perFilePasswords.style.display = 'none';
+    perFilePasswords.innerHTML = '';
+  }
+}
+
+clearBtn.addEventListener('click', () => {
+  queuedFiles = [];
+  fileInput.value = '';
+  dropEl.querySelector('p strong').textContent = 'Clique para selecionar';
+  processBtn.disabled = true;
+  resultsCard.style.display = 'none';
+  resultsBody.innerHTML = '';
+  lastResults = [];
+  perFilePwMap = new Map();
+  renderPerFilePasswords();
+});
+
+processBtn.addEventListener('click', async () => {
+  resultsCard.style.display = 'block';
+  resultsBody.innerHTML = '';
+  lastResults = [];
+  const multiple = queuedFiles.length > 1;
+  for (const file of queuedFiles) {
+    const row = document.createElement('tr');
+    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="7"><span class="badge info">Processando...</span></td>';
+    resultsBody.appendChild(row);
+    const password = multiple ? (perFilePwMap.get(file) || '') : globalPw.value;
+    await processFile(file, password, row);
+  }
+});
+
+async function processFile(file, password, row) {
+  try {
+    const buffer = await file.arrayBuffer();
+    const result = parsePfx(buffer, password || '');
+    renderRow(row, file, result, password || '');
+    lastResults.push({ file: file.name, ...result });
+  } catch (err) {
+    renderError(row, file, err);
+  }
+}
+
+function parsePfx(arrayBuffer, password) {
+  const bytes = new Uint8Array(arrayBuffer);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  const der = forge.util.createBuffer(binary, 'binary');
+  const asn1 = forge.asn1.fromDer(der);
+  const p12 = forge.pkcs12.pkcs12FromAsn1(asn1, password);
+
+  const bags = p12.getBags({ bagType: forge.pki.oids.certBag });
+  const certBags = bags[forge.pki.oids.certBag] || [];
+  if (certBags.length === 0) throw new Error('Nenhum certificado encontrado no arquivo.');
+
+  let leaf = certBags.find(b => {
+    const c = b.cert;
+    return c.subject.hash !== c.issuer.hash;
+  });
+  if (!leaf) leaf = certBags[0];
+  const cert = leaf.cert;
+
+  const cn = getField(cert.subject, 'CN') || getSubjectRaw(cert.subject);
+  const issuerCn = getField(cert.issuer, 'CN') || getSubjectRaw(cert.issuer);
+
+  return {
+    cn: cn,
+    issuer: issuerCn,
+    notBefore: cert.validity.notBefore,
+    notAfter: cert.validity.notAfter
+  };
+}
+
+function getField(entity, name) {
+  const f = entity.getField(name);
+  return f ? f.value : null;
+}
+
+function getSubjectRaw(entity) {
+  return entity.attributes.map(a => a.shortName + '=' + a.value).join(', ');
+}
+
+function splitCnDocumento(cn) {
+  if (!cn) return { nome: '', doc: '' };
+  const match = cn.match(/^(.*):(\d{11}|\d{14})$/);
+  if (!match) return { nome: cn, doc: '' };
+  const digits = match[2];
+  const nome = match[1].trim();
+  const doc = digits.length === 11
+    ? digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    : digits.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+  return { nome, doc };
+}
+
+function renderRow(row, file, result, password) {
+  const filename = file.name;
+  const now = new Date();
+  const notAfter = result.notAfter;
+  const diffDays = Math.floor((notAfter - now) / (1000 * 60 * 60 * 24));
+  let badgeClass = 'ok', statusText = 'Válido';
+  if (diffDays < 0) { badgeClass = 'err'; statusText = 'Vencido'; }
+  else if (diffDays <= 30) { badgeClass = 'warn'; statusText = 'Vence em ' + diffDays + ' dia(s)'; }
+  else { statusText = 'Válido (' + diffDays + ' dias restantes)'; }
+
+  const dateStr = formatDate(notAfter);
+  const extMatch = filename.match(/\.(pfx|p12)$/i);
+  const ext = extMatch ? extMatch[0] : '.pfx';
+  const baseName = extMatch ? filename.slice(0, -ext.length) : filename;
+  const { nome: titular, doc: documento } = splitCnDocumento(result.cn);
+
+  row.innerHTML =
+    '<td class="filename clampable copyable" title="' + escapeHtml(filename) + '" data-copy="' + escapeHtml(filename) + '">' + escapeHtml(filename) + '</td>' +
+    '<td class="clampable copyable" title="' + escapeHtml(titular) + '" data-copy="' + escapeHtml(titular) + '">' + escapeHtml(titular || '-') + '</td>' +
+    '<td class="doc-cell' + (documento ? ' copyable' : '') + '" data-copy="' + escapeHtml(documento) + '">' + escapeHtml(documento || '-') + '</td>' +
+    '<td class="clampable copyable" title="' + escapeHtml(result.issuer || '') + '" data-copy="' + escapeHtml(result.issuer || '') + '">' + escapeHtml(result.issuer || '-') + '</td>' +
+    '<td class="copyable" data-copy="' + dateStr + '">' + dateStr + '</td>' +
+    '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
+    '<td>' +
+      '<div class="pw-cell">' +
+        '<span class="pwMask copyable" data-copy="' + escapeHtml(password) + '">' + (password ? '•'.repeat(Math.min(password.length, 12)) : '(sem senha)') + '</span>' +
+        (password ? '<button type="button" class="pwtoggle rowPwToggle" aria-label="Mostrar senha">&#128065;</button>' : '') +
+      '</div>' +
+    '</td>' +
+    '<td>' +
+      '<div class="rename-cell">' +
+        '<input type="text" class="renameInput" value="' + escapeHtml(baseName) + '">' +
+        '<span class="ext">' + ext + '</span>' +
+        '<button type="button" class="downloadBtn">Baixar</button>' +
+      '</div>' +
+    '</td>';
+
+  const pwMaskEl = row.querySelector('.pwMask');
+  const rowPwToggle = row.querySelector('.rowPwToggle');
+  if (rowPwToggle) {
+    let visible = false;
+    rowPwToggle.addEventListener('click', () => {
+      visible = !visible;
+      pwMaskEl.textContent = visible ? password : '•'.repeat(Math.min(password.length, 12));
+      rowPwToggle.innerHTML = visible ? '&#128584;' : '&#128065;';
+      rowPwToggle.setAttribute('aria-label', visible ? 'Esconder senha' : 'Mostrar senha');
+    });
+  }
+
+  const renameInput = row.querySelector('.renameInput');
+  const downloadBtn = row.querySelector('.downloadBtn');
+  downloadBtn.addEventListener('click', () => {
+    const newName = (renameInput.value.trim() || baseName) + ext;
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = newName;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  lastResults.push({
+    file: filename, cn: result.cn, issuer: result.issuer,
+    validade: dateStr, status: statusText
+  });
+}
+
+function renderError(row, file, err) {
+  const msg = String(err.message || err);
+  const isPwError = /password|mac|invalid/i.test(msg);
+  const friendly = isPwError ? 'Senha incorreta ou arquivo inválido.' : 'Erro ao processar: ' + msg;
+  row.innerHTML =
+    '<td class="filename">' + escapeHtml(file.name) + '</td>' +
+    '<td colspan="7">' +
+      '<span class="badge err">' + (isPwError ? 'Senha incorreta' : 'Erro') + '</span>' +
+      '<div class="errtext">' + escapeHtml(friendly) + '</div>' +
+      '<div class="retry">' +
+        '<div class="pwfield">' +
+          '<input type="password" placeholder="Senha para este arquivo" class="retryPw">' +
+          '<button type="button" class="pwtoggle retryToggle" aria-label="Mostrar senha">&#128065;</button>' +
+        '</div>' +
+        '<button class="retryBtn">Tentar novamente</button>' +
+      '</div>' +
+    '</td>';
+  const btn = row.querySelector('.retryBtn');
+  const input = row.querySelector('.retryPw');
+  btn.addEventListener('click', async () => {
+    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="7"><span class="badge info">Processando...</span></td>';
+    await processFile(file, input.value, row);
+  });
+}
+
+function formatDate(d) {
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  return dd + '/' + mm + '/' + yyyy;
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+</script>
+</body>
+</html>
