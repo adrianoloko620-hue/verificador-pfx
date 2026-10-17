@@ -139,8 +139,10 @@
   .formsBtn {
     padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border);
     background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap;
+    text-decoration: none; display: inline-block;
   }
   .formsBtn:hover { border-color: var(--accent); color: var(--accent); }
+  .formsBtn:visited { color: var(--text); }
   .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
   .theme-btn { white-space: nowrap; flex-shrink: 0; }
   .copyable { cursor: pointer; border-bottom: 1px dotted transparent; }
@@ -469,6 +471,7 @@ function renderRow(row, file, result, password) {
   const ext = extMatch ? extMatch[0] : '.pfx';
   const baseName = extMatch ? filename.slice(0, -ext.length) : filename;
   const { nome: titular, doc: documento } = splitCnDocumento(result.cn);
+  const formsUrl = buildFormsUrl({ baseName, documento, validade: dateStr, senha: password });
 
   row.innerHTML =
     '<td class="filename clampable copyable" title="' + escapeHtml(filename) + '" data-copy="' + escapeHtml(filename) + '">' + escapeHtml(filename) + '</td>' +
@@ -491,7 +494,7 @@ function renderRow(row, file, result, password) {
       '</div>' +
     '</td>' +
     '<td>' +
-      '<button type="button" class="formsBtn">Enviar ao Forms</button>' +
+      '<a class="formsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Enviar ao Forms</a>' +
     '</td>';
 
   const pwMaskEl = row.querySelector('.pwMask');
@@ -516,12 +519,6 @@ function renderRow(row, file, result, password) {
     a.download = newName;
     a.click();
     URL.revokeObjectURL(url);
-  });
-
-  const formsBtn = row.querySelector('.formsBtn');
-  formsBtn.addEventListener('click', () => {
-    const formsUrl = buildFormsUrl({ baseName, documento, validade: dateStr, senha: password });
-    window.open(formsUrl, '_blank');
   });
 
   lastResults.push({
