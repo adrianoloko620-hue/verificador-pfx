@@ -282,10 +282,13 @@ const GRAPH_SCOPES = ['https://graph.microsoft.com/Sites.ReadWrite.All'];
 const SP_SITE_HOST = 'upholdassessoria.sharepoint.com';
 const SP_SITE_PATH = '/sites/Upnet';
 const SP_TARGET_FOLDER = 'Certificados/CERTIFICADOS DIGITAIS/ATIVOS';
+const SP_INACTIVE_FOLDER = 'Certificados/CERTIFICADOS DIGITAIS/INATIVOS';
 
 let msalInstance = null;
 let currentAccount = null;
 let spDriveId = null;
+let spActiveFolderId = null;
+let spInactiveFolderId = null;
 
 async function initMsal() {
   try {
@@ -394,6 +397,140 @@ async function uploadToSharePoint(file, fileName, conflictBehavior) {
   });
   if (res.ok) return res.json();
   throw await graphErrorFromResponse(res);
+}
+
+async function findSpItemByPath(token, driveId, path) {
+  const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+  const res = await fetch('https://graph.microsoft.com/v1.0/drives/' + driveId + '/root:/' + encodedPath, {
+    headers: { Authorization: 'Bearer ' + token }
+  });
+  if (!res.ok) throw await graphErrorFromResponse(res);
+  return res.json();
+}
+
+async function resolveActiveFolderId(token, driveId) {
+  if (spActiveFolderId) return spActiveFolderId;
+  const folder = await findSpItemByPath(token, driveId, SP_TARGET_FOLDER);
+  spActiveFolderId = folder.id;
+  return spActiveFolderId;
+}
+
+async function resolveInactiveFolderId(token, driveId) {
+  if (spInactiveFolderId) return spInactiveFolderId;
+  const folder = await findSpItemByPath(token, driveId, SP_INACTIVE_FOLDER);
+  spInactiveFolderId = folder.id;
+  return spInactiveFolderId;
+}
+
+async function moveSpItem(token, driveId, itemId, destFolderId, newName, conflictBehavior) {
+  const url = 'https://graph.microsoft.com/v1.0/drives/' + encodeURIComponent(driveId) + '/items/' + encodeURIComponent(itemId) +
+    '?@microsoft.graph.conflictBehavior=' + encodeURIComponent(conflictBehavior);
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ parentReference: { id: destFolderId }, name: newName })
+  });
+  if (!res.ok) throw await graphErrorFromResponse(res);
+  return res.json();
+}
+
+function buildInactivatedName(originalName, includeTime) {
+  const dotIdx = originalName.lastIndexOf('.');
+  const base = dotIdx > 0 ? originalName.slice(0, dotIdx) : originalName;
+  const ext = dotIdx > 0 ? originalName.slice(dotIdx) : '';
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const yyyy = now.getFullYear();
+  let suffix = ' (inativado ' + dd + '-' + mm + '-' + yyyy;
+  if (includeTime) {
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    suffix += ' ' + hh + 'h' + min;
+  }
+  suffix += ')';
+  return base + suffix + ext;
+}
+
+function friendlySpMessage(err) {
+  if (err instanceof TypeError) return 'Falha de rede ao comunicar com o SharePoint.';
+  return (err && err.message) || 'Falha desconhecida.';
+}
+
+function showSpError(spStatus, stage, err) {
+  spStatus.className = 'sp-status err';
+  spStatus.textContent = '✗ Erro ' + stage + ': ' + friendlySpMessage(err);
+}
+
+function showSpSuccess(spStatus, newItem, movedItem) {
+  const label = movedItem ? 'Antigo movido para Inativos · Novo salvo' : 'Salvo no SharePoint';
+  let html = '✓ ' + label + ' — <a href="' + escapeHtml(newItem.webUrl) + '" target="_blank" rel="noopener noreferrer">Abrir na pasta</a>';
+  if (movedItem) {
+    html += ' · <a href="' + escapeHtml(movedItem.webUrl) + '" target="_blank" rel="noopener noreferrer">Ver antigo</a>';
+  }
+  spStatus.className = 'sp-status ok';
+  spStatus.innerHTML = html;
+}
+
+async function handleAtivosConflict(file, fileName, spStatus) {
+  const confirmed = confirm('Já existe "' + fileName + '" na pasta ATIVOS. Mover o arquivo antigo para INATIVOS e enviar o novo?');
+  if (!confirmed) {
+    spStatus.className = 'sp-status';
+    spStatus.textContent = 'Envio cancelado';
+    return;
+  }
+
+  spStatus.className = 'sp-status';
+  spStatus.textContent = 'Movendo antigo para Inativos…';
+
+  let token, driveId, oldItem, inactiveFolderId;
+  try {
+    token = await getGraphToken();
+    if (!token) { spStatus.textContent = 'Redirecionando para o login da Microsoft…'; return; }
+    driveId = await resolveSpDriveId(token);
+    oldItem = await findSpItemByPath(token, driveId, SP_TARGET_FOLDER + '/' + fileName);
+    inactiveFolderId = await resolveInactiveFolderId(token, driveId);
+  } catch (err) {
+    showSpError(spStatus, 'ao localizar o certificado antigo', err);
+    return;
+  }
+
+  const candidateNames = [fileName, buildInactivatedName(fileName, false), buildInactivatedName(fileName, true)];
+  let movedItem = null;
+  let moveErr = null;
+  for (const candidateName of candidateNames) {
+    try {
+      movedItem = await moveSpItem(token, driveId, oldItem.id, inactiveFolderId, candidateName, 'fail');
+      moveErr = null;
+      break;
+    } catch (err) {
+      moveErr = err;
+      if (!(err && err.status === 409)) break;
+    }
+  }
+  if (!movedItem) {
+    showSpError(spStatus, 'ao mover o certificado antigo para Inativos', moveErr);
+    return;
+  }
+
+  spStatus.textContent = 'Enviando novo…';
+  let newItem;
+  try {
+    newItem = await uploadToSharePoint(file, fileName, 'fail');
+  } catch (err) {
+    spStatus.textContent = 'Falha ao enviar; devolvendo o antigo para Ativos…';
+    try {
+      const activeFolderId = await resolveActiveFolderId(token, driveId);
+      await moveSpItem(token, driveId, movedItem.id, activeFolderId, fileName, 'fail');
+      showSpError(spStatus, 'ao enviar o novo certificado (o arquivo antigo foi devolvido para Ativos)', err);
+    } catch (rollbackErr) {
+      spStatus.className = 'sp-status err';
+      spStatus.textContent = '✗ Erro: falha ao enviar o novo certificado e também ao devolver o antigo para Ativos — verifique a pasta Inativos manualmente. (' + friendlySpMessage(err) + ')';
+    }
+    return;
+  }
+
+  showSpSuccess(spStatus, newItem, movedItem);
 }
 
 function copyToClipboard(text, el) {
@@ -677,7 +814,7 @@ function renderRow(row, file, result, password) {
   const spStatus = row.querySelector('.sp-status');
   let spUploading = false;
 
-  function doSpUpload(conflictBehavior) {
+  async function doSpUpload() {
     if (spUploading) return;
     if (!ensureLoggedInForUpload()) return;
     spUploading = true;
@@ -685,27 +822,23 @@ function renderRow(row, file, result, password) {
     spStatus.className = 'sp-status';
     spStatus.textContent = 'Enviando…';
     const fileName = (renameInput.value.trim() || baseName) + ext;
-    uploadToSharePoint(file, fileName, conflictBehavior).then(result => {
-      spStatus.className = 'sp-status ok';
-      spStatus.innerHTML = '✓ <a href="' + escapeHtml(result.webUrl) + '" target="_blank" rel="noopener noreferrer">Salvo no SharePoint</a>';
-    }).catch(err => {
+    try {
+      const newItem = await uploadToSharePoint(file, fileName, 'fail');
+      showSpSuccess(spStatus, newItem, null);
+    } catch (err) {
       if (err && err.status === 409) {
-        spStatus.className = 'sp-status';
-        spStatus.innerHTML = 'Já existe na pasta <button type="button" class="linklike spReplaceBtn">Substituir</button>';
-        spStatus.querySelector('.spReplaceBtn').addEventListener('click', () => doSpUpload('replace'));
+        await handleAtivosConflict(file, fileName, spStatus);
       } else {
-        const friendly = err instanceof TypeError ? 'Falha de rede ao enviar o arquivo.' : ((err && err.message) || 'Falha desconhecida.');
-        spStatus.className = 'sp-status err';
-        spStatus.textContent = '✗ Erro: ' + friendly;
+        showSpError(spStatus, 'ao enviar o certificado', err);
       }
-    }).finally(() => {
+    } finally {
       spUploading = false;
       spSaveBtn.disabled = false;
-    });
+    }
   }
 
-  spSaveBtn.addEventListener('click', () => doSpUpload('fail'));
-  spSaveFormsBtn.addEventListener('click', () => doSpUpload('fail'));
+  spSaveBtn.addEventListener('click', doSpUpload);
+  spSaveFormsBtn.addEventListener('click', doSpUpload);
 
   lastResults.push({
     file: filename, titular: titular, documento: documento,
