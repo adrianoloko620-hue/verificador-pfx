@@ -136,6 +136,11 @@
   .rename-cell button { padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap; }
   .rename-cell button:hover { border-color: var(--accent); color: var(--accent); }
   .rename-cell .ext { font-size: 12px; color: var(--muted); }
+  .formsBtn {
+    padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap;
+  }
+  .formsBtn:hover { border-color: var(--accent); color: var(--accent); }
   .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
   .theme-btn { white-space: nowrap; flex-shrink: 0; }
   .copyable { cursor: pointer; border-bottom: 1px dotted transparent; }
@@ -201,6 +206,7 @@
           <th>Status</th>
           <th>Senha</th>
           <th>Renomear e baixar</th>
+          <th>Forms</th>
         </tr>
       </thead>
       <tbody id="resultsBody"></tbody>
@@ -360,7 +366,7 @@ processBtn.addEventListener('click', async () => {
   const multiple = queuedFiles.length > 1;
   for (const file of queuedFiles) {
     const row = document.createElement('tr');
-    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="7"><span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="8"><span class="badge info">Processando...</span></td>';
     resultsBody.appendChild(row);
     const password = multiple ? (perFilePwMap.get(file) || '') : globalPw.value;
     await processFile(file, password, row);
@@ -483,6 +489,9 @@ function renderRow(row, file, result, password) {
         '<span class="ext">' + ext + '</span>' +
         '<button type="button" class="downloadBtn">Baixar</button>' +
       '</div>' +
+    '</td>' +
+    '<td>' +
+      '<button type="button" class="formsBtn">Enviar ao Forms</button>' +
     '</td>';
 
   const pwMaskEl = row.querySelector('.pwMask');
@@ -509,6 +518,12 @@ function renderRow(row, file, result, password) {
     URL.revokeObjectURL(url);
   });
 
+  const formsBtn = row.querySelector('.formsBtn');
+  formsBtn.addEventListener('click', () => {
+    const formsUrl = buildFormsUrl({ baseName, documento, validade: dateStr, senha: password });
+    window.open(formsUrl, '_blank');
+  });
+
   lastResults.push({
     file: filename, titular: titular, documento: documento,
     issuer: result.issuer, validade: dateStr, status: statusText, senha: password
@@ -521,7 +536,7 @@ function renderError(row, file, err) {
   const friendly = isPwError ? 'Senha incorreta ou arquivo inválido.' : 'Erro ao processar: ' + msg;
   row.innerHTML =
     '<td class="filename">' + escapeHtml(file.name) + '</td>' +
-    '<td colspan="7">' +
+    '<td colspan="8">' +
       '<span class="badge err">' + (isPwError ? 'Senha incorreta' : 'Erro') + '</span>' +
       '<div class="errtext">' + escapeHtml(friendly) + '</div>' +
       '<div class="retry">' +
@@ -535,9 +550,23 @@ function renderError(row, file, err) {
   const btn = row.querySelector('.retryBtn');
   const input = row.querySelector('.retryPw');
   btn.addEventListener('click', async () => {
-    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="7"><span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="8"><span class="badge info">Processando...</span></td>';
     await processFile(file, input.value, row);
   });
+}
+
+const FORMS_BASE_URL = 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=KDU_6t7YTEOAZiusVjJy621B2cJsUd9JuQpMmyg9gQ9UMzdWNFBBSFg1WU9YVkVFUjNRNFFaNU5RVC4u';
+
+function buildFormsUrl(data) {
+  const docDigits = (data.documento || '').replace(/\D/g, '');
+  const params = [];
+  if (docDigits.length === 11) params.push('r9c8156695f434c25859fb3c5d69c43a6=PF');
+  else if (docDigits.length === 14) params.push('r9c8156695f434c25859fb3c5d69c43a6=PJ');
+  params.push('r3fa919840096436fb5a09abbefaa0c9b=' + encodeURIComponent(data.baseName));
+  params.push('r684aa7fa6ca44d30afd8b6c0c09d14d0=' + encodeURIComponent(docDigits));
+  params.push('rbe32b4b836bd447d9fed9e4ac27a6737=' + encodeURIComponent(data.validade));
+  params.push('r678a359c28fd461e96baf6eb0e737ccf=' + encodeURIComponent(data.senha || ''));
+  return FORMS_BASE_URL + '&' + params.join('&');
 }
 
 function formatDate(d) {
