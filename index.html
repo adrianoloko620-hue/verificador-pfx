@@ -44,7 +44,7 @@
   }
   .wrap { max-width: 1400px; margin: 0 auto; }
   h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
-  p.sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  p.sub { color: var(--muted); font-size: 13px; margin: 0; }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -52,29 +52,22 @@
     padding: 1.5rem;
     margin-bottom: 1.5rem;
   }
-  .drop {
-    border: 2px dashed var(--border);
-    border-radius: 10px;
-    padding: 2rem 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .drop:hover, .drop.dragover { border-color: var(--accent); background: var(--accent-soft); }
-  .drop p { margin: 0.3rem 0; color: var(--muted); font-size: 14px; }
-  .drop strong { color: var(--text); }
   input[type=file] { display: none; }
-  .pwrow {
-    display: flex; align-items: center; gap: 10px; margin-top: 1rem; flex-wrap: wrap;
+  .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .topbar-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .text-link { color: var(--muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
+  .text-link:hover { color: var(--accent); text-decoration: underline; }
+  .auth-area { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .icon-btn {
+    width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer; font-size: 15px;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .pwrow label { font-size: 13px; color: var(--muted); }
-  .pwrow input[type=password], .pwrow input[type=text] {
-    flex: 1; min-width: 180px; padding: 8px 10px; border: 1px solid var(--border);
-    border-radius: 6px; font-size: 14px;
-  }
-  .pwrow small { color: var(--muted); font-size: 12px; width: 100%; }
-  .pwfield { position: relative; flex: 1; min-width: 180px; display: flex; }
-  .pwfield input { flex: 1; padding-right: 34px; }
+  .icon-btn:hover { border-color: var(--accent); }
+  .toolbar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .toolbar-hint { display: block; color: var(--muted); font-size: 12px; margin-top: 8px; }
+  .pwfield { position: relative; flex: 1; min-width: 0; display: flex; }
+  .pwfield input { flex: 1; min-width: 0; padding: 8px 34px 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
   .pwtoggle {
     position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
     background: none; border: none; cursor: pointer; padding: 4px; color: var(--muted);
@@ -93,139 +86,139 @@
   .badge.err { background: var(--red-bg); color: var(--red-text); border-color: var(--red-border); }
   .badge.info { background: #eef2f6; color: var(--muted); border-color: var(--border); }
   .filename { font-weight: 500; }
+  .error-row-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .errtext { color: var(--red-text); font-size: 12px; }
   .retry { display: flex; gap: 6px; margin-top: 4px; }
   .retry input { flex: 1; padding: 5px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; }
   .retry button { padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
-  .actions { display: flex; gap: 10px; margin-top: 1rem; }
-  .form-link-btn {
-    padding: 9px 18px;
-    border-radius: 6px;
-    border: 1px solid var(--accent);
-    background: var(--accent);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .form-link-btn:hover { opacity: 0.9; }
-  .sheet-link-btn { background: #1f7a3f; border-color: #1f7a3f; }
-  button.form-link-btn { cursor: pointer; }
-  .export-btn { background: #1f7a3f; border-color: #1f7a3f; }
-  .export-btn:disabled { opacity: 0.5; cursor: default; }
   button.main {
-    padding: 9px 18px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent);
+    height: 38px; padding: 0 18px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent);
     color: #fff; font-size: 14px; cursor: pointer;
   }
   button.main:disabled { opacity: 0.5; cursor: default; }
   button.secondary {
-    padding: 9px 18px; border-radius: 6px; border: 1px solid var(--border); background: var(--card);
+    height: 38px; padding: 0 18px; border-radius: 6px; border: 1px solid var(--border); background: var(--card);
     color: var(--text); font-size: 14px; cursor: pointer;
   }
+  button.secondary:disabled { opacity: 0.5; cursor: default; }
   .note {
     font-size: 12.5px; color: var(--muted); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
   }
-  .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 1rem; }
   .perfile-title { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .perfile-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .perfile-row .perfile-name { flex: 0 0 auto; max-width: 40%; font-size: 13px; word-break: break-all; }
-  .rename-cell { display: flex; gap: 6px; align-items: center; }
-  .rename-cell input { width: 140px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; }
-  .rename-cell button { padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap; }
-  .rename-cell button:hover { border-color: var(--accent); color: var(--accent); }
-  .rename-cell .ext { font-size: 12px; color: var(--muted); }
-  .formsBtn {
-    padding: 5px 10px; font-size: 12px; border-radius: 5px; border: 1px solid var(--border);
-    background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap;
-    text-decoration: none; display: inline-block;
-  }
-  .formsBtn:hover { border-color: var(--accent); color: var(--accent); }
-  .formsBtn:visited { color: var(--text); }
-  .formsBtn:disabled { opacity: 0.5; cursor: default; }
   .linklike {
     background: none; border: none; padding: 0; margin: 0; color: var(--accent);
     cursor: pointer; text-decoration: underline; font-size: inherit; font-family: inherit;
   }
   .linklike:hover { opacity: 0.8; }
-  .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
-  .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .auth-area { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-  .theme-btn { white-space: nowrap; flex-shrink: 0; }
-  .sp-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .results-toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  .btn-sm {
+    height: 30px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); font-size: 13px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm:disabled { opacity: 0.5; cursor: default; }
+  .btn-sm.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-sm.primary:hover { opacity: 0.9; color: #fff; }
+  .cert-cell { max-width: 320px; }
+  .cert-name { font-weight: 600; }
+  .cert-doc { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .validade-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .actions-cell { display: flex; align-items: center; gap: 6px; }
+  .menu-wrap { position: relative; }
+  .menuToggle { width: 30px; padding: 0; font-size: 16px; line-height: 1; }
+  .menu {
+    position: absolute; top: calc(100% + 4px); right: 0; min-width: 190px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 4px; z-index: 20;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .menu[hidden] { display: none; }
+  .menu-item {
+    display: block; width: 100%; text-align: left; padding: 8px 10px; border-radius: 6px;
+    border: none; background: none; color: var(--text); font-size: 13px; cursor: pointer; text-decoration: none;
+  }
+  .menu-item:hover { background: var(--accent-soft); color: var(--accent); }
+  .subrow { display: none; }
+  .subrow:has(.rename-panel.open) { display: table-row; }
+  .subrow:has(.sp-status:not(:empty)) { display: table-row; }
+  .subrow td { padding: 10px 8px 14px; }
+  .subrow-content { display: flex; flex-direction: column; gap: 8px; }
+  .rename-panel { display: none; align-items: center; gap: 8px; }
+  .rename-panel.open { display: flex; }
+  .rename-panel input {
+    width: 220px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px;
+  }
+  .rename-panel .ext { font-size: 12px; color: var(--muted); }
   .sp-status { font-size: 12px; color: var(--muted); }
+  .sp-status:empty { display: none; }
   .sp-status.err { color: var(--red-text); }
   .sp-status.ok a { color: var(--green-text); font-weight: 500; }
   .copyable { cursor: pointer; border-bottom: 1px dotted transparent; }
   .copyable:hover { border-bottom-color: var(--muted); }
   .copyable.copied { color: var(--accent); border-bottom-color: transparent; }
-  .doc-cell { font-variant-numeric: tabular-nums; }
-  .pw-cell { display: flex; align-items: center; gap: 6px; }
   .pwMask { font-family: monospace; font-size: 13px; letter-spacing: 1px; }
   .table-scroll { overflow-x: auto; }
   table { table-layout: auto; }
   td.clampable {
     word-break: break-word;
   }
+  .drag-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000;
+    display: flex; align-items: center; justify-content: center; pointer-events: none;
+  }
+  .drag-overlay[hidden] { display: none; }
+  .drag-overlay-text {
+    background: var(--card); color: var(--text); border: 2px dashed var(--accent);
+    border-radius: 12px; padding: 24px 40px; font-size: 16px; font-weight: 500;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header-row">
+  <header class="topbar">
     <div>
-      <h1>Verificador de validade de certificados digitais</h1>
-      <p class="sub">Envie arquivos .pfx / .p12 e veja a data de validade de cada certificado. Todo o processamento acontece aqui no navegador — nenhum arquivo é enviado a servidor algum.</p>
+      <h1>Verificador de certificados digitais</h1>
+      <p class="sub">Confira a validade e envie certificados para o SharePoint e o Forms</p>
     </div>
-    <div class="header-actions">
+    <nav class="topbar-actions">
+      <a class="text-link" href="https://forms.office.com/Pages/ResponsePage.aspx?id=KDU_6t7YTEOAZiusVjJy621B2cJsUd9JuQpMmyg9gQ9UMzdWNFBBSFg1WU9YVkVFUjNRNFFaNU5RVC4u" target="_blank" rel="noopener noreferrer">Informe (Forms)</a>
+      <a class="text-link" href="https://upholdassessoria.sharepoint.com/:x:/r/sites/Upnet/_layouts/15/Doc.aspx?sourcedoc=%7BC5487056-624D-4B5F-BDA5-2D100D0EE52B%7D&file=CERTIFICADOS_DIGITAIS.xlsx&action=default&mobileredirect=true" target="_blank" rel="noopener noreferrer">Planilha</a>
       <span id="authArea" class="auth-area">Carregando sessão…</span>
-      <button type="button" class="secondary theme-btn" id="themeToggle">🌙 Modo escuro</button>
-    </div>
-  </div>
+      <button type="button" class="icon-btn" id="themeToggle" title="Mudar para modo escuro" aria-label="Mudar para modo escuro">🌙</button>
+    </nav>
+  </header>
 
   <div class="card">
-    <div class="drop" id="drop">
-      <p><strong>Clique para selecionar</strong> ou arraste os arquivos .pfx aqui</p>
-      <p>Você pode selecionar vários arquivos de uma vez</p>
-    </div>
-    <input type="file" id="fileInput" multiple accept=".pfx,.p12">
-
-    <div class="pwrow">
-      <label for="globalPw">Senha (aplicada a todos os arquivos):</label>
-      <div class="pwfield">
-        <input type="password" id="globalPw" placeholder="Senha do certificado">
+    <div class="toolbar">
+      <button type="button" class="secondary" id="addFilesBtn">+ Adicionar certificados</button>
+      <div class="pwfield" id="globalPwWrap">
+        <input type="password" id="globalPw" placeholder="Senha geral (aplicada a todos)">
         <button type="button" class="pwtoggle" data-target="globalPw" aria-label="Mostrar senha">&#128065;</button>
       </div>
-      <small>Se algum arquivo tiver senha diferente, você poderá informá-la individualmente depois.</small>
-    </div>
-
-    <div id="perFilePasswords" style="display:none; margin-top: 1rem;"></div>
-
-    <div class="actions">
       <button class="main" id="processBtn" disabled>Verificar validade</button>
       <button class="secondary" id="clearBtn">Limpar</button>
-      <a class="form-link-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=KDU_6t7YTEOAZiusVjJy621B2cJsUd9JuQpMmyg9gQ9UMzdWNFBBSFg1WU9YVkVFUjNRNFFaNU5RVC4u" target="_blank" rel="noopener noreferrer">📋 Informe de Certificados Digitais</a>
-      <a class="form-link-btn sheet-link-btn" href="https://upholdassessoria.sharepoint.com/:x:/r/sites/Upnet/_layouts/15/Doc.aspx?sourcedoc=%7BC5487056-624D-4B5F-BDA5-2D100D0EE52B%7D&file=CERTIFICADOS_DIGITAIS.xlsx&action=default&mobileredirect=true" target="_blank" rel="noopener noreferrer">📊 Planilha de Certificados Digitais</a>
-      <button type="button" class="form-link-btn export-btn" id="exportSheetBtn" disabled>📥 Exportar dados para planilha</button>
     </div>
+    <small class="toolbar-hint" id="pwHint">Se algum arquivo tiver senha diferente, você poderá informá-la individualmente depois.</small>
+    <div id="perFilePasswords" style="display:none; margin-top: 1rem;"></div>
+    <input type="file" id="fileInput" multiple accept=".pfx,.p12">
   </div>
 
   <div class="card" id="resultsCard" style="display:none;">
+    <div class="results-toolbar">
+      <button type="button" class="btn-sm" id="exportSheetBtn" disabled>Exportar para planilha</button>
+    </div>
     <div class="table-scroll">
     <table id="resultsTable">
       <thead>
         <tr>
-          <th>Arquivo</th>
-          <th>Titular</th>
-          <th>CPF/CNPJ</th>
-          <th>Emissor</th>
+          <th>Certificado</th>
           <th>Validade</th>
-          <th>Status</th>
           <th>Senha</th>
-          <th>Renomear e baixar</th>
-          <th>Forms</th>
-          <th>SharePoint</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody id="resultsBody"></tbody>
@@ -233,11 +226,15 @@
     </div>
   </div>
 
-  <p class="note">Ferramenta local: os arquivos .pfx e as senhas digitadas não saem do seu computador — tudo é lido e processado diretamente no navegador via JavaScript. Basta abrir este arquivo .html (funciona offline, sem instalar nada). Dica: clique em qualquer informação da tabela (arquivo, titular, CPF/CNPJ, emissor ou validade) para copiá-la.</p>
+  <p class="note">Os arquivos são lidos no navegador e só vão para o SharePoint quando você clica em Salvar.</p>
+</div>
+
+<div class="drag-overlay" id="dragOverlay" hidden>
+  <div class="drag-overlay-text">Solte os certificados aqui</div>
 </div>
 
 <script>
-const dropEl = document.getElementById('drop');
+const addFilesBtn = document.getElementById('addFilesBtn');
 const fileInput = document.getElementById('fileInput');
 const processBtn = document.getElementById('processBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -245,18 +242,25 @@ const exportSheetBtn = document.getElementById('exportSheetBtn');
 const resultsCard = document.getElementById('resultsCard');
 const resultsBody = document.getElementById('resultsBody');
 const globalPw = document.getElementById('globalPw');
-const pwrow = document.querySelector('.pwrow');
+const globalPwWrap = document.getElementById('globalPwWrap');
+const pwHint = document.getElementById('pwHint');
 const perFilePasswords = document.getElementById('perFilePasswords');
 const themeToggle = document.getElementById('themeToggle');
 const authArea = document.getElementById('authArea');
+const dragOverlay = document.getElementById('dragOverlay');
 
 let queuedFiles = [];
 let lastResults = [];
 let perFilePwMap = new Map();
+let activeMenuClose = null;
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  themeToggle.textContent = theme === 'dark' ? '☀️ Modo claro' : '🌙 Modo escuro';
+  const isDark = theme === 'dark';
+  themeToggle.textContent = isDark ? '☀️' : '🌙';
+  const title = isDark ? 'Mudar para modo claro' : 'Mudar para modo escuro';
+  themeToggle.title = title;
+  themeToggle.setAttribute('aria-label', title);
   try { localStorage.setItem('pfxCheckerTheme', theme); } catch (e) {}
 }
 (function initTheme() {
@@ -582,27 +586,46 @@ resultsBody.addEventListener('click', e => {
   togglePwVisibility(input, btn);
 });
 
-dropEl.addEventListener('click', () => fileInput.click());
-dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('dragover'); });
-dropEl.addEventListener('dragleave', () => dropEl.classList.remove('dragover'));
-dropEl.addEventListener('drop', e => {
+addFilesBtn.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => { addFiles(e.target.files); fileInput.value = ''; });
+
+let dragDepth = 0;
+function hasFilesPayload(e) {
+  return e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+}
+window.addEventListener('dragenter', e => {
+  if (!hasFilesPayload(e)) return;
   e.preventDefault();
-  dropEl.classList.remove('dragover');
+  dragDepth++;
+  dragOverlay.hidden = false;
+});
+window.addEventListener('dragover', e => {
+  if (!hasFilesPayload(e)) return;
+  e.preventDefault();
+});
+window.addEventListener('dragleave', () => {
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0) dragOverlay.hidden = true;
+});
+window.addEventListener('drop', e => {
+  if (!hasFilesPayload(e)) return;
+  e.preventDefault();
+  dragDepth = 0;
+  dragOverlay.hidden = true;
   addFiles(e.dataTransfer.files);
 });
-fileInput.addEventListener('change', e => addFiles(e.target.files));
 
 function addFiles(fileList) {
   const valid = Array.from(fileList).filter(f => /\.(pfx|p12)$/i.test(f.name));
   queuedFiles = queuedFiles.concat(valid);
-  dropEl.querySelector('p strong').textContent = queuedFiles.length + ' arquivo(s) selecionado(s)';
   processBtn.disabled = queuedFiles.length === 0;
   renderPerFilePasswords();
 }
 
 function renderPerFilePasswords() {
   if (queuedFiles.length > 1) {
-    pwrow.style.display = 'none';
+    globalPwWrap.style.display = 'none';
+    pwHint.style.display = 'none';
     perFilePasswords.style.display = 'block';
     perFilePasswords.innerHTML = '<div class="perfile-title">Informe a senha de cada arquivo:</div>';
     queuedFiles.forEach((file, idx) => {
@@ -622,7 +645,8 @@ function renderPerFilePasswords() {
       perFilePasswords.appendChild(row);
     });
   } else {
-    pwrow.style.display = 'flex';
+    globalPwWrap.style.display = 'flex';
+    pwHint.style.display = '';
     perFilePasswords.style.display = 'none';
     perFilePasswords.innerHTML = '';
   }
@@ -631,7 +655,6 @@ function renderPerFilePasswords() {
 clearBtn.addEventListener('click', () => {
   queuedFiles = [];
   fileInput.value = '';
-  dropEl.querySelector('p strong').textContent = 'Clique para selecionar';
   processBtn.disabled = true;
   resultsCard.style.display = 'none';
   resultsBody.innerHTML = '';
@@ -649,7 +672,7 @@ processBtn.addEventListener('click', async () => {
   const multiple = queuedFiles.length > 1;
   for (const file of queuedFiles) {
     const row = document.createElement('tr');
-    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="9"><span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td colspan="4"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
     resultsBody.appendChild(row);
     const password = multiple ? (perFilePwMap.get(file) || '') : globalPw.value;
     await processFile(file, password, row);
@@ -755,50 +778,53 @@ function renderRow(row, file, result, password) {
   const formsUrl = buildFormsUrl({ baseName, documento, validade: dateStr, senha: password });
 
   row.innerHTML =
-    '<td class="filename clampable copyable" title="' + escapeHtml(filename) + '" data-copy="' + escapeHtml(filename) + '">' + escapeHtml(filename) + '</td>' +
-    '<td class="clampable copyable" title="' + escapeHtml(titular) + '" data-copy="' + escapeHtml(titular) + '">' + escapeHtml(titular || '-') + '</td>' +
-    '<td class="doc-cell' + (documento ? ' copyable' : '') + '" data-copy="' + escapeHtml(documento) + '">' + escapeHtml(documento || '-') + '</td>' +
-    '<td class="clampable copyable" title="' + escapeHtml(result.issuer || '') + '" data-copy="' + escapeHtml(result.issuer || '') + '">' + escapeHtml(result.issuer || '-') + '</td>' +
-    '<td class="copyable" data-copy="' + dateStr + '">' + dateStr + '</td>' +
-    '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
+    '<td class="cert-cell">' +
+      '<div class="cert-name clampable copyable" title="' + escapeHtml(titular) + '" data-copy="' + escapeHtml(titular) + '">' + escapeHtml(titular || '-') + '</div>' +
+      '<div class="cert-doc' + (documento ? ' copyable' : '') + '" data-copy="' + escapeHtml(documento) + '">' + escapeHtml(documento || '-') + '</div>' +
+    '</td>' +
     '<td>' +
-      '<div class="pw-cell">' +
-        '<span class="pwMask copyable" data-copy="' + escapeHtml(password) + '">' + (password ? '•'.repeat(Math.min(password.length, 12)) : '(sem senha)') + '</span>' +
-        (password ? '<button type="button" class="pwtoggle rowPwToggle" aria-label="Mostrar senha">&#128065;</button>' : '') +
+      '<div class="validade-cell">' +
+        '<span class="copyable" data-copy="' + dateStr + '">' + dateStr + '</span>' +
+        '<span class="badge ' + badgeClass + '">' + statusText + '</span>' +
       '</div>' +
     '</td>' +
     '<td>' +
-      '<div class="rename-cell">' +
-        '<input type="text" class="renameInput" value="' + escapeHtml(baseName) + '">' +
-        '<span class="ext">' + ext + '</span>' +
-        '<button type="button" class="downloadBtn">Baixar</button>' +
-      '</div>' +
+      '<span class="pwMask copyable" data-copy="' + escapeHtml(password) + '">' + escapeHtml(password || '(sem senha)') + '</span>' +
     '</td>' +
     '<td>' +
-      '<a class="formsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Enviar ao Forms</a>' +
-    '</td>' +
-    '<td>' +
-      '<div class="sp-cell">' +
-        '<button type="button" class="formsBtn spSaveBtn">Salvar no SharePoint</button>' +
-        '<a class="formsBtn spSaveFormsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Salvar + Forms</a>' +
-        '<span class="sp-status"></span>' +
+      '<div class="actions-cell">' +
+        '<a class="btn-sm primary spSaveFormsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Salvar + Forms</a>' +
+        '<div class="menu-wrap">' +
+          '<button type="button" class="btn-sm menuToggle" aria-haspopup="true" aria-expanded="false" title="Mais ações">⋯</button>' +
+          '<div class="menu" hidden>' +
+            '<button type="button" class="menu-item spSaveBtn">Salvar só no SharePoint</button>' +
+            '<a class="menu-item formsOnlyLink" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Só abrir o Forms</a>' +
+            '<button type="button" class="menu-item renameToggleBtn">Renomear e baixar</button>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
     '</td>';
 
-  const pwMaskEl = row.querySelector('.pwMask');
-  const rowPwToggle = row.querySelector('.rowPwToggle');
-  if (rowPwToggle) {
-    let visible = false;
-    rowPwToggle.addEventListener('click', () => {
-      visible = !visible;
-      pwMaskEl.textContent = visible ? password : '•'.repeat(Math.min(password.length, 12));
-      rowPwToggle.innerHTML = visible ? '&#128584;' : '&#128065;';
-      rowPwToggle.setAttribute('aria-label', visible ? 'Esconder senha' : 'Mostrar senha');
-    });
+  let subrow = row.nextElementSibling;
+  if (!subrow || !subrow.classList.contains('subrow')) {
+    subrow = document.createElement('tr');
+    subrow.className = 'subrow';
+    subrow.innerHTML =
+      '<td colspan="4">' +
+        '<div class="subrow-content">' +
+          '<div class="rename-panel">' +
+            '<input type="text" class="renameInput" value="' + escapeHtml(baseName) + '">' +
+            '<span class="ext">' + ext + '</span>' +
+            '<button type="button" class="btn-sm downloadBtn">Baixar</button>' +
+          '</div>' +
+          '<div class="sp-status"></div>' +
+        '</div>' +
+      '</td>';
+    row.parentNode.insertBefore(subrow, row.nextSibling);
   }
 
-  const renameInput = row.querySelector('.renameInput');
-  const downloadBtn = row.querySelector('.downloadBtn');
+  const renameInput = subrow.querySelector('.renameInput');
+  const downloadBtn = subrow.querySelector('.downloadBtn');
   downloadBtn.addEventListener('click', () => {
     const newName = (renameInput.value.trim() || baseName) + ext;
     const url = URL.createObjectURL(file);
@@ -809,9 +835,16 @@ function renderRow(row, file, result, password) {
     URL.revokeObjectURL(url);
   });
 
+  const renamePanel = subrow.querySelector('.rename-panel');
+  const renameToggleBtn = row.querySelector('.renameToggleBtn');
+  renameToggleBtn.addEventListener('click', () => {
+    closeMenu();
+    renamePanel.classList.toggle('open');
+  });
+
+  const spStatus = subrow.querySelector('.sp-status');
   const spSaveBtn = row.querySelector('.spSaveBtn');
   const spSaveFormsBtn = row.querySelector('.spSaveFormsBtn');
-  const spStatus = row.querySelector('.sp-status');
   let spUploading = false;
 
   async function doSpUpload() {
@@ -837,8 +870,37 @@ function renderRow(row, file, result, password) {
     }
   }
 
-  spSaveBtn.addEventListener('click', doSpUpload);
+  spSaveBtn.addEventListener('click', () => { closeMenu(); doSpUpload(); });
   spSaveFormsBtn.addEventListener('click', doSpUpload);
+
+  const formsOnlyLink = row.querySelector('.formsOnlyLink');
+  formsOnlyLink.addEventListener('click', () => closeMenu());
+
+  const menuToggle = row.querySelector('.menuToggle');
+  const menu = row.querySelector('.menu');
+  function onDocClick(e) {
+    if (!menu.contains(e.target) && e.target !== menuToggle) closeMenu();
+  }
+  function onEscKey(e) {
+    if (e.key === 'Escape') closeMenu();
+  }
+  function closeMenu() {
+    menu.hidden = true;
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onDocClick, true);
+    document.removeEventListener('keydown', onEscKey, true);
+    if (activeMenuClose === closeMenu) activeMenuClose = null;
+  }
+  menuToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!menu.hidden) { closeMenu(); return; }
+    if (activeMenuClose) activeMenuClose();
+    menu.hidden = false;
+    menuToggle.setAttribute('aria-expanded', 'true');
+    activeMenuClose = closeMenu;
+    document.addEventListener('click', onDocClick, true);
+    document.addEventListener('keydown', onEscKey, true);
+  });
 
   lastResults.push({
     file: filename, titular: titular, documento: documento,
@@ -851,9 +913,8 @@ function renderError(row, file, err) {
   const isPwError = /password|mac|invalid/i.test(msg);
   const friendly = isPwError ? 'Senha incorreta ou arquivo inválido.' : 'Erro ao processar: ' + msg;
   row.innerHTML =
-    '<td class="filename">' + escapeHtml(file.name) + '</td>' +
-    '<td colspan="9">' +
-      '<span class="badge err">' + (isPwError ? 'Senha incorreta' : 'Erro') + '</span>' +
+    '<td colspan="4">' +
+      '<div class="error-row-head"><span class="filename">' + escapeHtml(file.name) + '</span><span class="badge err">' + (isPwError ? 'Senha incorreta' : 'Erro') + '</span></div>' +
       '<div class="errtext">' + escapeHtml(friendly) + '</div>' +
       '<div class="retry">' +
         '<div class="pwfield">' +
@@ -866,7 +927,7 @@ function renderError(row, file, err) {
   const btn = row.querySelector('.retryBtn');
   const input = row.querySelector('.retryPw');
   btn.addEventListener('click', async () => {
-    row.innerHTML = '<td class="filename">' + escapeHtml(file.name) + '</td><td colspan="9"><span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td colspan="4"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
     await processFile(file, input.value, row);
   });
 }
