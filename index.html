@@ -81,8 +81,6 @@
     display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
     border: 1px solid;
   }
-  .badge.ok { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
-  .badge.warn { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
   .badge.err { background: var(--red-bg); color: var(--red-text); border-color: var(--red-border); }
   .badge.info { background: #eef2f6; color: var(--muted); border-color: var(--border); }
   .filename { font-weight: 500; }
@@ -105,8 +103,17 @@
     font-size: 12.5px; color: var(--muted); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
   }
   .perfile-title { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  .perfile-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .perfile-row .perfile-name { flex: 0 0 auto; max-width: 40%; font-size: 13px; word-break: break-all; }
+  .perfile-row {
+    display: grid; grid-template-columns: 280px 240px auto; align-items: center; gap: 10px;
+    margin-bottom: 6px; font-size: 13px;
+  }
+  .perfile-row > * { min-width: 0; }
+  .perfile-row .perfile-name {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .perfile-row .pwfield input { font-size: 13px; padding: 6px 34px 6px 8px; }
+  .perfile-row.has-error .pwfield input { border-color: var(--red-border); }
+  .perfile-error { color: var(--red-text); font-size: 12px; }
   .linklike {
     background: none; border: none; padding: 0; margin: 0; color: var(--accent);
     cursor: pointer; text-decoration: underline; font-size: inherit; font-family: inherit;
@@ -114,8 +121,8 @@
   .linklike:hover { opacity: 0.8; }
   .results-toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
   .btn-sm {
-    height: 30px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--border);
-    background: var(--card); color: var(--text); font-size: 13px; cursor: pointer;
+    height: 28px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); font-size: 12.5px; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
     text-decoration: none;
   }
@@ -123,25 +130,16 @@
   .btn-sm:disabled { opacity: 0.5; cursor: default; }
   .btn-sm.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn-sm.primary:hover { opacity: 0.9; color: #fff; }
-  .cert-cell { max-width: 320px; }
-  .cert-name { font-weight: 600; }
-  .cert-doc { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .validade-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-  .actions-cell { display: flex; align-items: center; gap: 6px; }
-  .menu-wrap { position: relative; }
-  .menuToggle { width: 30px; padding: 0; font-size: 16px; line-height: 1; }
-  .menu {
-    position: absolute; top: calc(100% + 4px); right: 0; min-width: 190px;
-    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 4px; z-index: 20;
-    display: flex; flex-direction: column; gap: 2px;
-  }
-  .menu[hidden] { display: none; }
-  .menu-item {
-    display: block; width: 100%; text-align: left; padding: 8px 10px; border-radius: 6px;
-    border: none; background: none; color: var(--text); font-size: 13px; cursor: pointer; text-decoration: none;
-  }
-  .menu-item:hover { background: var(--accent-soft); color: var(--accent); }
+  .btn-sm.icon-only { width: 28px; padding: 0; font-size: 14px; flex-shrink: 0; }
+  .clampable { word-break: break-word; }
+  .cert-name { font-weight: 600; max-width: 240px; display: inline-block; }
+  .doc-cell { font-variant-numeric: tabular-nums; }
+  .validade-cell { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .validade-sep { color: var(--muted); }
+  .validade-days.ok { color: var(--green-text); }
+  .validade-days.soon { color: var(--amber-text); }
+  .validade-days.overdue { color: var(--red-text); }
+  .actions-cell { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; white-space: nowrap; }
   .subrow { display: none; }
   .subrow:has(.rename-panel.open) { display: table-row; }
   .subrow:has(.sp-status:not(:empty)) { display: table-row; }
@@ -163,9 +161,6 @@
   .pwMask { font-family: monospace; font-size: 13px; letter-spacing: 1px; }
   .table-scroll { overflow-x: auto; }
   table { table-layout: auto; }
-  td.clampable {
-    word-break: break-word;
-  }
   .drag-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000;
     display: flex; align-items: center; justify-content: center; pointer-events: none;
@@ -216,6 +211,7 @@
       <thead>
         <tr>
           <th>Certificado</th>
+          <th>CPF/CNPJ</th>
           <th>Validade</th>
           <th>Senha</th>
           <th>Ações</th>
@@ -252,7 +248,13 @@ const dragOverlay = document.getElementById('dragOverlay');
 let queuedFiles = [];
 let lastResults = [];
 let perFilePwMap = new Map();
-let activeMenuClose = null;
+let perFileErrors = new Set();
+let verifiedFiles = new Set();
+let perFileMode = false;
+
+function pendingFiles() {
+  return queuedFiles.filter(f => !verifiedFiles.has(f));
+}
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -618,31 +620,39 @@ window.addEventListener('drop', e => {
 function addFiles(fileList) {
   const valid = Array.from(fileList).filter(f => /\.(pfx|p12)$/i.test(f.name));
   queuedFiles = queuedFiles.concat(valid);
-  processBtn.disabled = queuedFiles.length === 0;
+  if (queuedFiles.length > 1) perFileMode = true;
+  processBtn.disabled = pendingFiles().length === 0;
   renderPerFilePasswords();
 }
 
 function renderPerFilePasswords() {
-  if (queuedFiles.length > 1) {
+  const pending = pendingFiles();
+  if (perFileMode && pending.length > 0) {
     globalPwWrap.style.display = 'none';
     pwHint.style.display = 'none';
     perFilePasswords.style.display = 'block';
     perFilePasswords.innerHTML = '<div class="perfile-title">Informe a senha de cada arquivo:</div>';
-    queuedFiles.forEach((file, idx) => {
+    pending.forEach((file, idx) => {
       const id = 'pf_pw_' + idx;
       if (!perFilePwMap.has(file)) perFilePwMap.set(file, '');
+      const hasError = perFileErrors.has(file);
       const row = document.createElement('div');
-      row.className = 'perfile-row';
+      row.className = 'perfile-row' + (hasError ? ' has-error' : '');
       row.innerHTML =
-        '<span class="perfile-name">' + escapeHtml(file.name) + '</span>' +
+        '<span class="perfile-name" title="' + escapeHtml(file.name) + '">' + escapeHtml(file.name) + '</span>' +
         '<div class="pwfield">' +
-          '<input type="password" id="' + id + '" placeholder="Senha do certificado">' +
+          '<input type="password" id="' + id + '" value="' + escapeHtml(perFilePwMap.get(file) || '') + '" placeholder="Senha do certificado">' +
           '<button type="button" class="pwtoggle" aria-label="Mostrar senha">&#128065;</button>' +
-        '</div>';
+        '</div>' +
+        (hasError ? '<span class="perfile-error">Senha incorreta</span>' : '<span></span>');
       const input = row.querySelector('input');
       input.addEventListener('input', () => perFilePwMap.set(file, input.value));
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); verifyPendingFile(file); }
+      });
       row.querySelector('.pwtoggle').addEventListener('click', e => togglePwVisibility(input, e.currentTarget));
       perFilePasswords.appendChild(row);
+      if (hasError) input.focus();
     });
   } else {
     globalPwWrap.style.display = 'flex';
@@ -650,6 +660,31 @@ function renderPerFilePasswords() {
     perFilePasswords.style.display = 'none';
     perFilePasswords.innerHTML = '';
   }
+}
+
+function appendResultRow(file, result, password) {
+  resultsCard.style.display = 'block';
+  const row = document.createElement('tr');
+  resultsBody.appendChild(row);
+  renderRow(row, file, result, password);
+}
+
+async function verifyPendingFile(file) {
+  const password = perFilePwMap.get(file) || '';
+  try {
+    const buffer = await file.arrayBuffer();
+    const result = parsePfx(buffer, password);
+    perFileErrors.delete(file);
+    verifiedFiles.add(file);
+    perFilePwMap.delete(file);
+    appendResultRow(file, result, password);
+    exportSheetBtn.disabled = lastResults.length === 0;
+  } catch (err) {
+    perFileErrors.add(file);
+    perFilePwMap.set(file, '');
+  }
+  processBtn.disabled = pendingFiles().length === 0;
+  renderPerFilePasswords();
 }
 
 clearBtn.addEventListener('click', () => {
@@ -660,22 +695,31 @@ clearBtn.addEventListener('click', () => {
   resultsBody.innerHTML = '';
   lastResults = [];
   perFilePwMap = new Map();
+  perFileErrors = new Set();
+  verifiedFiles = new Set();
+  perFileMode = false;
   renderPerFilePasswords();
   exportSheetBtn.disabled = true;
 });
 
 processBtn.addEventListener('click', async () => {
+  if (perFileMode) {
+    const filesToVerify = pendingFiles();
+    for (const file of filesToVerify) {
+      await verifyPendingFile(file);
+    }
+    return;
+  }
   resultsCard.style.display = 'block';
   resultsBody.innerHTML = '';
   lastResults = [];
   exportSheetBtn.disabled = true;
-  const multiple = queuedFiles.length > 1;
-  for (const file of queuedFiles) {
+  const filesToProcess = queuedFiles.slice();
+  for (const file of filesToProcess) {
     const row = document.createElement('tr');
-    row.innerHTML = '<td colspan="4"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td colspan="5"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
     resultsBody.appendChild(row);
-    const password = multiple ? (perFilePwMap.get(file) || '') : globalPw.value;
-    await processFile(file, password, row);
+    await processFile(file, globalPw.value, row);
   }
   exportSheetBtn.disabled = lastResults.length === 0;
 });
@@ -704,7 +748,9 @@ async function processFile(file, password, row) {
     const buffer = await file.arrayBuffer();
     const result = parsePfx(buffer, password || '');
     renderRow(row, file, result, password || '');
+    verifiedFiles.add(file);
   } catch (err) {
+    verifiedFiles.delete(file);
     renderError(row, file, err);
   }
 }
@@ -765,10 +811,18 @@ function renderRow(row, file, result, password) {
   const now = new Date();
   const notAfter = result.notAfter;
   const diffDays = Math.floor((notAfter - now) / (1000 * 60 * 60 * 24));
-  let badgeClass = 'ok', statusText = 'Válido';
-  if (diffDays < 0) { badgeClass = 'err'; statusText = 'Vencido'; }
-  else if (diffDays <= 30) { badgeClass = 'warn'; statusText = 'Vence em ' + diffDays + ' dia(s)'; }
-  else { statusText = 'Válido (' + diffDays + ' dias restantes)'; }
+  let validadeClass, daysText, titleAttr = '', statusText;
+  if (diffDays < 0) {
+    const overdueDays = Math.abs(diffDays);
+    validadeClass = 'overdue';
+    daysText = overdueDays + ' dia' + (overdueDays === 1 ? '' : 's');
+    titleAttr = ' title="' + escapeHtml('Vencido há ' + overdueDays + ' dia' + (overdueDays === 1 ? '' : 's')) + '"';
+    statusText = 'Vencido há ' + overdueDays + ' dia' + (overdueDays === 1 ? '' : 's');
+  } else {
+    validadeClass = diffDays <= 30 ? 'soon' : 'ok';
+    daysText = diffDays + ' dia' + (diffDays === 1 ? '' : 's');
+    statusText = 'Válido (' + daysText + ' restantes)';
+  }
 
   const dateStr = formatDate(notAfter);
   const extMatch = filename.match(/\.(pfx|p12)$/i);
@@ -779,29 +833,27 @@ function renderRow(row, file, result, password) {
 
   row.innerHTML =
     '<td class="cert-cell">' +
-      '<div class="cert-name clampable copyable" title="' + escapeHtml(titular) + '" data-copy="' + escapeHtml(titular) + '">' + escapeHtml(titular || '-') + '</div>' +
-      '<div class="cert-doc' + (documento ? ' copyable' : '') + '" data-copy="' + escapeHtml(documento) + '">' + escapeHtml(documento || '-') + '</div>' +
+      '<span class="cert-name clampable copyable" title="' + escapeHtml(titular) + '" data-copy="' + escapeHtml(titular) + '">' + escapeHtml(titular || '-') + '</span>' +
+    '</td>' +
+    '<td class="doc-cell">' +
+      '<span class="' + (documento ? 'copyable' : '') + '" data-copy="' + escapeHtml(documento) + '">' + escapeHtml(documento || '-') + '</span>' +
     '</td>' +
     '<td>' +
-      '<div class="validade-cell">' +
+      '<span class="validade-cell">' +
         '<span class="copyable" data-copy="' + dateStr + '">' + dateStr + '</span>' +
-        '<span class="badge ' + badgeClass + '">' + statusText + '</span>' +
-      '</div>' +
+        '<span class="validade-sep">·</span>' +
+        '<span class="validade-days ' + validadeClass + '"' + titleAttr + '>' + daysText + '</span>' +
+      '</span>' +
     '</td>' +
     '<td>' +
       '<span class="pwMask copyable" data-copy="' + escapeHtml(password) + '">' + escapeHtml(password || '(sem senha)') + '</span>' +
     '</td>' +
     '<td>' +
       '<div class="actions-cell">' +
-        '<a class="btn-sm primary spSaveFormsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Salvar + Forms</a>' +
-        '<div class="menu-wrap">' +
-          '<button type="button" class="btn-sm menuToggle" aria-haspopup="true" aria-expanded="false" title="Mais ações">⋯</button>' +
-          '<div class="menu" hidden>' +
-            '<button type="button" class="menu-item spSaveBtn">Salvar só no SharePoint</button>' +
-            '<a class="menu-item formsOnlyLink" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Só abrir o Forms</a>' +
-            '<button type="button" class="menu-item renameToggleBtn">Renomear e baixar</button>' +
-          '</div>' +
-        '</div>' +
+        '<button type="button" class="btn-sm spSaveBtn">SharePoint</button>' +
+        '<a class="btn-sm formsOnlyLink" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">Forms</a>' +
+        '<a class="btn-sm primary spSaveFormsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">SharePoint + Forms</a>' +
+        '<button type="button" class="btn-sm icon-only renameToggleBtn" title="Renomear e baixar" aria-label="Renomear e baixar">✎</button>' +
       '</div>' +
     '</td>';
 
@@ -810,7 +862,7 @@ function renderRow(row, file, result, password) {
     subrow = document.createElement('tr');
     subrow.className = 'subrow';
     subrow.innerHTML =
-      '<td colspan="4">' +
+      '<td colspan="5">' +
         '<div class="subrow-content">' +
           '<div class="rename-panel">' +
             '<input type="text" class="renameInput" value="' + escapeHtml(baseName) + '">' +
@@ -838,7 +890,6 @@ function renderRow(row, file, result, password) {
   const renamePanel = subrow.querySelector('.rename-panel');
   const renameToggleBtn = row.querySelector('.renameToggleBtn');
   renameToggleBtn.addEventListener('click', () => {
-    closeMenu();
     renamePanel.classList.toggle('open');
   });
 
@@ -870,37 +921,8 @@ function renderRow(row, file, result, password) {
     }
   }
 
-  spSaveBtn.addEventListener('click', () => { closeMenu(); doSpUpload(); });
+  spSaveBtn.addEventListener('click', doSpUpload);
   spSaveFormsBtn.addEventListener('click', doSpUpload);
-
-  const formsOnlyLink = row.querySelector('.formsOnlyLink');
-  formsOnlyLink.addEventListener('click', () => closeMenu());
-
-  const menuToggle = row.querySelector('.menuToggle');
-  const menu = row.querySelector('.menu');
-  function onDocClick(e) {
-    if (!menu.contains(e.target) && e.target !== menuToggle) closeMenu();
-  }
-  function onEscKey(e) {
-    if (e.key === 'Escape') closeMenu();
-  }
-  function closeMenu() {
-    menu.hidden = true;
-    menuToggle.setAttribute('aria-expanded', 'false');
-    document.removeEventListener('click', onDocClick, true);
-    document.removeEventListener('keydown', onEscKey, true);
-    if (activeMenuClose === closeMenu) activeMenuClose = null;
-  }
-  menuToggle.addEventListener('click', e => {
-    e.stopPropagation();
-    if (!menu.hidden) { closeMenu(); return; }
-    if (activeMenuClose) activeMenuClose();
-    menu.hidden = false;
-    menuToggle.setAttribute('aria-expanded', 'true');
-    activeMenuClose = closeMenu;
-    document.addEventListener('click', onDocClick, true);
-    document.addEventListener('keydown', onEscKey, true);
-  });
 
   lastResults.push({
     file: filename, titular: titular, documento: documento,
@@ -913,7 +935,7 @@ function renderError(row, file, err) {
   const isPwError = /password|mac|invalid/i.test(msg);
   const friendly = isPwError ? 'Senha incorreta ou arquivo inválido.' : 'Erro ao processar: ' + msg;
   row.innerHTML =
-    '<td colspan="4">' +
+    '<td colspan="5">' +
       '<div class="error-row-head"><span class="filename">' + escapeHtml(file.name) + '</span><span class="badge err">' + (isPwError ? 'Senha incorreta' : 'Erro') + '</span></div>' +
       '<div class="errtext">' + escapeHtml(friendly) + '</div>' +
       '<div class="retry">' +
@@ -927,7 +949,7 @@ function renderError(row, file, err) {
   const btn = row.querySelector('.retryBtn');
   const input = row.querySelector('.retryPw');
   btn.addEventListener('click', async () => {
-    row.innerHTML = '<td colspan="4"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
+    row.innerHTML = '<td colspan="5"><span class="filename">' + escapeHtml(file.name) + '</span> <span class="badge info">Processando...</span></td>';
     await processFile(file, input.value, row);
   });
 }
