@@ -93,8 +93,9 @@
   .perfile-title { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .perfile-row {
     display: grid; grid-template-columns: 1fr 240px; align-items: start; gap: 10px;
-    margin-bottom: 6px; font-size: 13px;
+    padding: 8px 0; font-size: 13px; border-bottom: 1px solid var(--border);
   }
+  .perfile-row:last-child { border-bottom: none; }
   .perfile-row > * { min-width: 0; }
   .perfile-row .perfile-name {
     word-break: break-word; padding-top: 6px;
