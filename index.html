@@ -92,7 +92,7 @@
   }
   .perfile-title { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .perfile-row {
-    display: grid; grid-template-columns: 1fr 240px; align-items: start; gap: 10px;
+    display: grid; grid-template-columns: 1fr 240px auto; align-items: start; gap: 10px;
     padding: 8px 0; font-size: 13px; border-bottom: 1px solid var(--border);
   }
   .perfile-row:last-child { border-bottom: none; }
@@ -130,6 +130,13 @@
   .validade-days.soon { color: var(--amber-text); }
   .validade-days.overdue { color: var(--red-text); }
   .actions-cell { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; white-space: nowrap; }
+  .remove-cell { width: 1%; white-space: nowrap; text-align: center; }
+  .remove-btn {
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font-size: 14px; padding: 4px; line-height: 1; border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .remove-btn:hover { color: var(--red-text); }
   .subrow { display: none; }
   .subrow:has(.rename-panel.open) { display: table-row; }
   .subrow:has(.sp-status:not(:empty)) { display: table-row; }
@@ -205,6 +212,7 @@
           <th>Validade</th>
           <th>Senha</th>
           <th>Ações</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="resultsBody"></tbody>
@@ -278,6 +286,12 @@ const SP_SITE_HOST = 'upholdassessoria.sharepoint.com';
 const SP_SITE_PATH = '/sites/Upnet';
 const SP_TARGET_FOLDER = 'Certificados/CERTIFICADOS DIGITAIS/ATIVOS';
 const SP_INACTIVE_FOLDER = 'Certificados/CERTIFICADOS DIGITAIS/INATIVOS';
+const SP_LIBRARY_PATH = SP_SITE_PATH + '/Rede';
+
+function buildSpFolderUrl(relativeFolder) {
+  const fullPath = SP_LIBRARY_PATH + '/' + relativeFolder;
+  return 'https://' + SP_SITE_HOST + SP_LIBRARY_PATH + '/Forms/AllItems.aspx?id=' + encodeURIComponent(fullPath);
+}
 
 let msalInstance = null;
 let currentAccount = null;
@@ -457,11 +471,15 @@ function showSpError(spStatus, stage, err) {
   spStatus.textContent = '✗ Erro ' + stage + ': ' + friendlySpMessage(err);
 }
 
-function showSpSuccess(spStatus, newItem, movedItem) {
+function showSpSuccess(spStatus, newItem, movedItem, fileName) {
   const label = movedItem ? 'Antigo movido para Inativos · Novo salvo' : 'Salvo no SharePoint';
-  let html = '✓ ' + label + ' — <a href="' + escapeHtml(newItem.webUrl) + '" target="_blank" rel="noopener noreferrer">Abrir na pasta</a>';
+  const ativosUrl = buildSpFolderUrl(SP_TARGET_FOLDER);
+  const ativosTitle = 'Abrir a pasta ATIVOS — ' + fileName;
+  let html = '✓ ' + label + ' — <a href="' + escapeHtml(ativosUrl) + '" title="' + escapeHtml(ativosTitle) + '" target="_blank" rel="noopener noreferrer">Abrir na pasta</a>';
   if (movedItem) {
-    html += ' · <a href="' + escapeHtml(movedItem.webUrl) + '" target="_blank" rel="noopener noreferrer">Ver antigo</a>';
+    const inativosUrl = buildSpFolderUrl(SP_INACTIVE_FOLDER);
+    const inativosTitle = 'Abrir a pasta INATIVOS — ' + fileName;
+    html += ' · <a href="' + escapeHtml(inativosUrl) + '" title="' + escapeHtml(inativosTitle) + '" target="_blank" rel="noopener noreferrer">Ver antigo</a>';
   }
   spStatus.className = 'sp-status ok';
   spStatus.innerHTML = html;
@@ -525,7 +543,7 @@ async function handleAtivosConflict(file, fileName, spStatus) {
     return;
   }
 
-  showSpSuccess(spStatus, newItem, movedItem);
+  showSpSuccess(spStatus, newItem, movedItem, fileName);
 }
 
 function copyToClipboard(text, el) {
@@ -631,13 +649,21 @@ function renderPerFilePasswords() {
             '<button type="button" class="pwtoggle" aria-label="Mostrar senha">&#128065;</button>' +
           '</div>' +
           (errorMsg ? '<span class="perfile-error">' + escapeHtml(errorMsg) + '</span>' : '') +
-        '</div>';
+        '</div>' +
+        '<button type="button" class="remove-btn perfile-remove" title="Remover da lista" aria-label="Remover da lista">✕</button>';
       const input = row.querySelector('input');
       input.addEventListener('input', () => perFilePwMap.set(file, input.value));
       input.addEventListener('keydown', e => {
         if (e.key === 'Enter') { e.preventDefault(); verifyPendingFile(file); }
       });
       row.querySelector('.pwtoggle').addEventListener('click', e => togglePwVisibility(input, e.currentTarget));
+      row.querySelector('.perfile-remove').addEventListener('click', () => {
+        queuedFiles = queuedFiles.filter(f => f !== file);
+        perFilePwMap.delete(file);
+        perFileErrors.delete(file);
+        processBtn.disabled = pendingFiles().length === 0;
+        renderPerFilePasswords();
+      });
       perFilePasswords.appendChild(row);
     });
   } else {
@@ -820,6 +846,9 @@ function renderRow(row, file, result, password) {
         '<a class="btn-sm primary spSaveFormsBtn" href="' + escapeHtml(formsUrl) + '" target="_blank" rel="noopener noreferrer">SharePoint + Forms</a>' +
         '<button type="button" class="btn-sm icon-only renameToggleBtn" title="Renomear e baixar" aria-label="Renomear e baixar">✎</button>' +
       '</div>' +
+    '</td>' +
+    '<td class="remove-cell">' +
+      '<button type="button" class="remove-btn" title="Remover da lista" aria-label="Remover da lista">✕</button>' +
     '</td>';
 
   let subrow = row.nextElementSibling;
@@ -827,7 +856,7 @@ function renderRow(row, file, result, password) {
     subrow = document.createElement('tr');
     subrow.className = 'subrow';
     subrow.innerHTML =
-      '<td colspan="5">' +
+      '<td colspan="6">' +
         '<div class="subrow-content">' +
           '<div class="rename-panel">' +
             '<input type="text" class="renameInput" value="' + escapeHtml(baseName) + '">' +
@@ -873,7 +902,7 @@ function renderRow(row, file, result, password) {
     const fileName = (renameInput.value.trim() || baseName) + ext;
     try {
       const newItem = await uploadToSharePoint(file, fileName, 'fail');
-      showSpSuccess(spStatus, newItem, null);
+      showSpSuccess(spStatus, newItem, null, fileName);
     } catch (err) {
       if (err && err.status === 409) {
         await handleAtivosConflict(file, fileName, spStatus);
@@ -889,9 +918,23 @@ function renderRow(row, file, result, password) {
   spSaveBtn.addEventListener('click', doSpUpload);
   spSaveFormsBtn.addEventListener('click', doSpUpload);
 
-  lastResults.push({
+  const resultEntry = {
     file: filename, titular: titular, documento: documento,
     issuer: result.issuer, validade: dateStr, status: statusText, senha: password
+  };
+  lastResults.push(resultEntry);
+
+  const removeBtn = row.querySelector('.remove-btn');
+  removeBtn.addEventListener('click', () => {
+    subrow.remove();
+    row.remove();
+    queuedFiles = queuedFiles.filter(f => f !== file);
+    verifiedFiles.delete(file);
+    perFilePwMap.delete(file);
+    perFileErrors.delete(file);
+    lastResults = lastResults.filter(r => r !== resultEntry);
+    exportSheetBtn.disabled = lastResults.length === 0;
+    if (resultsBody.children.length === 0) resultsCard.style.display = 'none';
   });
 }
 
